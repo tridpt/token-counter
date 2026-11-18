@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Usage Monitor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>AI Usage Monitor</h1>
+      <p>Doc usage thuc te tu log local cua AI coding tools khi co metadata.</p>
+    </div>
+    <div class="actions">
+      <button id="scanBtn" type="button">Scan Local Logs</button>
+      <div id="status" class="status">Ready</div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="metric-grid">
+      <div class="metric accent">
+        <span>Total tokens</span>
+        <strong id="totalTokens">0</strong>
+      </div>
+      <div class="metric">
+        <span>Input tokens</span>
+        <strong id="inputTokens">0</strong>
+      </div>
+      <div class="metric">
+        <span>Output tokens</span>
+        <strong id="outputTokens">0</strong>
+      </div>
+      <div class="metric success">
+        <span>Kiro credits</span>
+        <strong id="creditsUsed">0</strong>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>Sources</h2>
+          <p id="scanSummary">Chua scan.</p>
+        </div>
+      </div>
+      <div id="sourceList" class="source-list"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <h2>Recent usage records</h2>
+          <p>Chi hien thi metadata: tokens, credits, model, request id va duong dan log.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Source</th>
+              <th>Model</th>
+              <th>Input</th>
+              <th>Output</th>
+              <th>Total</th>
+              <th>Credits</th>
+              <th>Context</th>
+            </tr>
+          </thead>
+          <tbody id="recordRows"></tbody>
+        </table>
+      </div>
+      <p id="emptyRecords" class="empty">No usage records found yet.</p>
+    </section>
+
+    <section class="panel note-panel">
+      <h2>Do chinh xac</h2>
+      <p>
+        Claude Code co the co token usage that neu doc duoc JSONL hoac telemetry. Kiro tren may nay dang ghi credit va context percentage, khong ghi input/output token split trong log local. Antigravity chu yeu hien quota trong Settings; app nay chi lay token that neu log co usage metadata.
+      </p>
+    </section>
+
+    <section class="panel usage-panel">
+      <div class="section-head">
+        <div>
+          <h2>Paste API usage JSON</h2>
+          <p>Dan response API de lay usage that tu provider.</p>
+        </div>
+        <button id="parseUsageBtn" type="button" class="secondary">Parse</button>
+      </div>
+      <textarea id="usageJson" spellcheck="false" placeholder='{"usage":{"input_tokens":120,"output_tokens":80,"total_tokens":200}}'></textarea>
+      <div class="usage-result">
+        <div>
+          <span>Input</span>
+          <strong id="actualInput">-</strong>
+        </div>
+        <div>
+          <span>Output</span>
+          <strong id="actualOutput">-</strong>
+        </div>
+        <div>
+          <span>Total</span>
+          <strong id="actualTotal">-</strong>
+        </div>
+      </div>
+      <p id="usageError" class="error hidden"></p>
+    </section>
+
+    <section class="panel manual-panel">
+      <div class="section-head">
+        <div>
+          <h2>Manual tokenizer estimate</h2>
+          <p>Phan nay chi de uoc tinh text, khong phai usage that cua app AI.</p>
+        </div>
+        <div class="toolbar">
+          <select id="modelSelect"></select>
+          <button id="countBtn" type="button" class="secondary">Count</button>
+          <button id="clearBtn" type="button" class="secondary">Clear</button>
+        </div>
+      </div>
+
+      <div class="editor-grid">
+        <label class="field">
+          <span>Input</span>
+          <textarea id="inputText" spellcheck="false" placeholder="Prompt, system message, context..."></textarea>
+          <small><span id="inputChars">0</span> chars</small>
+        </label>
+
+        <label class="field">
+          <span>Output</span>
+          <textarea id="outputText" spellcheck="false" placeholder="AI answer / completion..."></textarea>
+          <small><span id="outputChars">0</span> chars</small>
+        </label>
+      </div>
+
+      <div class="manual-summary">
+        <div><span>Input</span><strong id="manualInputTokens">0</strong></div>
+        <div><span>Output</span><strong id="manualOutputTokens">0</strong></div>
+        <div><span>Total</span><strong id="manualTotalTokens">0</strong></div>
+        <div><span>Encoding</span><strong id="encodingName">-</strong></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
